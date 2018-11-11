@@ -8,7 +8,7 @@ def new_game(n):
 def game_state(mat):
     for i in range(len(mat)):
         for j in range(len(mat[0])):
-            if mat[i][j]==32:
+            if mat[i][j]==2048:
                 return 'win'
     for i in range(len(mat)-1): 
         for j in range(len(mat[0])-1): 
@@ -26,12 +26,6 @@ def game_state(mat):
             return 'not over'
     return 'lose'
 
-# 反转
-'''
-1 2 3     3 2 1
-4 5 6 ==> 6 5 4
-7 8 9     9 8 7
-'''
 def reverse(mat):
     new=[]
     x=y=len(mat)
@@ -41,11 +35,6 @@ def reverse(mat):
             new[i].append(mat[i][y-j-1])
     return new
 
-'''
-1 2 3     1 4 7
-4 5 6 ==> 2 5 8
-7 8 9     3 6 9
-'''
 def transpose(mat):
     new=[]
     x=y=len(mat)
@@ -55,12 +44,6 @@ def transpose(mat):
             new[i].append(mat[j][i])
     return new
 
-'''
- 0  0  2  1       2  1  0  0
- 6  6  5  4  ==>  6  6  5  4
- 0  9  8  7       9  8  7  0
-10 11 12 13      10 11 12 13
-'''
 def cover_up(mat):
     x=y=len(mat)
     new=[x*[0] for i in range(y)]
@@ -75,12 +58,6 @@ def cover_up(mat):
                 count+=1
     return (new,done)
 
-'''
- 0  0  2  1       2  1  0  0
- 6  6  5  4  ==> 12  0  5  4
- 0  9  8  7       9  8  7  0
-10 11 12 13      10 11 12 13
-'''
 def merge(mat):
     done=False
     x=y=len(mat)
@@ -150,12 +127,11 @@ KEY_LEFT = "'a'"
 KEY_RIGHT = "'d'"
 
 class GameGrid(Frame):
-    # 创建实例的时候，为实例绑上属性
     def __init__(self):
         Frame.__init__(self)
 
         self.grid()
-        self.master.title('2048游戏')
+        self.master.title('2048')
         self.master.bind("<Key>", self.key_down)
 
         self.commands = { KEY_UP: up, KEY_DOWN: down, KEY_LEFT: left, KEY_RIGHT: right }
@@ -198,11 +174,8 @@ class GameGrid(Frame):
                 else:
                     self.grid_cells[i][j].configure(text=str(new_number), bg=BACKGROUND_COLOR_DICT[new_number], fg=CELL_COLOR_DICT[new_number])
         self.update_idletasks()
-
-
-    # action
+        
     def key_down(self, event):
-        # 对象转化为供解释器读取的形式
         key = repr(event.char)
         if key in self.commands:
             self.matrix,done = self.commands[key](self.matrix)
